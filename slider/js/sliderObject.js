@@ -10,34 +10,37 @@ let sliderObject = {
         }
         this.blocked = true;
 
-        let imageWidth = this.slides[this.activeSlideIndex].getBoundingClientRect().width;
+        // let nextSlideIndex = this.computeNextSlide();
+        let nextSlideIndex = 1//this.computeNextSlide();
+        console.log(`curr: %${this.activeSlideIndex}, next: ${nextSlideIndex}`);
 
-        let nextSlideIndex = this.computeNextSlide();
-
+        this.element.classList.add('big');
         this.slides[nextSlideIndex].classList.remove('no-display');
-        this.slides[nextSlideIndex].classList.add('next');
 
-        this.slides[nextSlideIndex].classList.remove('animated-transform');
-        this.slides[nextSlideIndex].style.transform = `translate(${imageWidth}px)`;
-        this.slides[nextSlideIndex].classList.add('animated-transform');
+
+        this.slides[this.activeSlideIndex].classList.add('move-left');
+        this.slides[nextSlideIndex].classList.add('move-left');
 
         setTimeout(() => {
-            this.slides[this.activeSlideIndex].style.transform = `translate(-${imageWidth}px)`;
-            this.slides[nextSlideIndex].style.transform = `translate(-${0}px)`;
-            setTimeout(() => {
-                this.slides[this.activeSlideIndex].classList.add('no-display');
-                this.slides[this.activeSlideIndex].style.transform = `translate(${0}px)`;
-                this.slides[nextSlideIndex].classList.remove('next');
-                this.activeSlideIndex = nextSlideIndex;
-                this.blocked = false;
-            }, 800);
-        }, 0)
-    },
-    prevSlide: function () {
+            this.slides[this.activeSlideIndex].classList.add('no-display');
+            this.slides[this.activeSlideIndex].classList.remove('move-left');
+            this.slides[nextSlideIndex].classList.remove('move-left');
+            this.element.classList.remove('big');
 
+            this.blocked = false;
+            let firstSlide = this.slides[0];
+            let newSlides = [];
+            for (let i = 1; i < this.slides.length; i++) {
+                newSlides.push(this.slides[i]);
+            }
+            newSlides.push(firstSlide);
+            this.shuffleSlides();
+            this.slides = newSlides;
+        }, 750);
     },
-    computeNextSlide: function () {
-        return this.activeSlideIndex + 1 >= this.slides.length ? 0 : this.activeSlideIndex + 1
+    shuffleSlides() {
+        this.element.removeChild(this.slides[0]);
+        this.element.appendChild(this.slides[0]);
     }
 };
 

@@ -1,4 +1,4 @@
-let sliderObject = {
+let uncontrollableSlider = {
     element: null,
     slides: [],
     activeSlideIndex: 0,
@@ -9,14 +9,10 @@ let sliderObject = {
             return
         }
         this.blocked = true;
-
-        // let nextSlideIndex = this.computeNextSlide();
-        let nextSlideIndex = 1//this.computeNextSlide();
-        console.log(`curr: %${this.activeSlideIndex}, next: ${nextSlideIndex}`);
+        let nextSlideIndex = 1;
 
         this.element.classList.add('big');
         this.slides[nextSlideIndex].classList.remove('no-display');
-
 
         this.slides[this.activeSlideIndex].classList.add('move-left');
         this.slides[nextSlideIndex].classList.add('move-left');
@@ -49,10 +45,14 @@ window.onload = function () {
         slider = document.querySelector('.slider'),
         slides = Array.from(document.querySelectorAll('.slider .slide'));
 
-    sliderObject.element = slider;
-    sliderObject.slides = slides;
+    uncontrollableSlider.element = slider;
+    uncontrollableSlider.slides = slides;
 
     for (let i = 1; i < slides.length; i++) {
         slides[i].classList.add('no-display');
     }
+
+    setInterval(() => {
+        uncontrollableSlider.nextSlide();
+    }, 3000);
 };
